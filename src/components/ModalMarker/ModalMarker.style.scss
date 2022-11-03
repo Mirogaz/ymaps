@@ -1,0 +1,51 @@
+.modal {
+    width: 598px;
+    height: 602px;
+    background: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    box-shadow: 10px 10px 18px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+
+    &__image {
+        width: 538px;
+        height: 266px;
+        margin: 30px 30px 10px 30px;
+    }
+
+    &__head {
+        width: 521px;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 23px;
+        color: #0055BB;
+        margin: 0 30px 0 30px;
+    }
+
+    &__address {
+        width: 538px;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #333333;
+        margin: 10px 30px 0 30px;
+    }
+
+    &__body {
+        width: 538px;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #333333;
+        margin: 10px 30px 30px 30px;
+    }
+}
+
+.active {
+    z-index: 99;
+    background-color: black;
+}
