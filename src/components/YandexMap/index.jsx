@@ -10,6 +10,13 @@ const YandexMap = () => {
     const [modal, setModal] = useState(false);
     const [dataMaps, setDataMaps] = useState([]);
     const [iconPlacemark, setIconPlacemark] = useState([]);
+    const [coordX, setCoordX] = useState(0);
+    const [coordY, setCoordY] = useState(0);
+
+    const determinationCoordinates = (e) => {
+        setCoordX(e.clientX + 100);
+        setCoordY(e.clientY - 200);
+    }
 
     const openModalMarker = () => {
         setModal(prev => !prev)
@@ -28,10 +35,11 @@ const YandexMap = () => {
     }, [])
 
     return (
-        <div className='map'>
+        <div className='map' onClick={determinationCoordinates}>
             <Filter />
             <YMaps version={2.1}>
                 <Map
+                    onClick={() => setModal(false)}
                     defaultState={{
                         center: [62.7265672139301, 72.58875649651917],
                         zoom: 4,
@@ -50,9 +58,7 @@ const YandexMap = () => {
                 >
                 {
                     dataMaps.map(data => {
-
                         return <Placemark
-                                    key={data.id}
                                     onClick={openModalMarker}
                                     geometry={[data.attributes.latitude, data.attributes.longitude]}
                                     options={{
@@ -73,6 +79,7 @@ const YandexMap = () => {
             </YMaps>
             { modal ? <div tabIndex="-1" onBlur={() => setModal(false)}>
                 <ModalMarker
+                    style={{right: `${coordX}px`, top: `${coordY}px`}}
                     modalImage={'http://localhost:29080/strapi' + dataMaps[0].attributes.photo.data.attributes.url}
                     modalHead={dataMaps[0].attributes.name}
                     modalAddress={dataMaps[0].attributes.address}

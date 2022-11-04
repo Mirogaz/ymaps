@@ -36,6 +36,10 @@ const Filter = () => {
                                 return <InputComponent
                                         key={data.id}
                                         type='checkbox'
+                                        value={data.attributes.type}
+                                        onChange={(e) => {
+                                            console.log(e.target.value)
+                                        }}
                                         classNameInput='filter__item_input'
                                         className='filter__item_content'
                                         children={
