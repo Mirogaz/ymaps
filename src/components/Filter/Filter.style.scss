@@ -26,6 +26,8 @@
         margin-left: 40px;
         margin-top: 15px;
 
+        overflow-y: scroll;
+
         &_content {
             display: flex;
             flex-direction: row;

@@ -9,28 +9,19 @@ const YandexMap = () => {
 
     const [modal, setModal] = useState(false);
     const [dataMaps, setDataMaps] = useState([]);
-    const [iconPlacemark, setIconPlacemark] = useState([]);
     const [coordX, setCoordX] = useState(0);
     const [coordY, setCoordY] = useState(0);
+    const [idPlacemark, setIdPlacemark] = useState(0);
 
     const determinationCoordinates = (e) => {
         setCoordX(e.clientX + 100);
         setCoordY(e.clientY - 200);
     }
 
-    const openModalMarker = () => {
-        setModal(prev => !prev)
-    }
-
     useEffect(() => {
         dataPlacemark
             .getDataModal()
             .then(res => setDataMaps(res.data.data))
-            .catch(e => console.log(e));
-
-        dataPlacemark
-            .getDataPlacemark()
-            .then(res => setIconPlacemark(res.data.data[0].attributes.type.data.attributes.icon.data))
             .catch(e => console.log(e));
     }, [])
 
@@ -59,11 +50,16 @@ const YandexMap = () => {
                 {
                     dataMaps.map(data => {
                         return <Placemark
-                                    onClick={openModalMarker}
+                                    key={data.id}
+                                    onClick={() => {
+                                        setIdPlacemark(data.id);
+                                        setModal(prev => !prev);
+                                        }
+                                    }
                                     geometry={[data.attributes.latitude, data.attributes.longitude]}
                                     options={{
                                             iconLayout: 'default#image',
-                                            iconImageHref: iconPlacemark.id === data.id ? 'http://localhost:29080/strapi' + iconPlacemark.attributes.url : '',
+                                            iconImageHref: 'http://localhost:29080/strapi' + data.attributes.type.data.attributes.icon.data.attributes.url,
                                             iconImageSize: [75, 75],
                                         }
                                     }
@@ -77,15 +73,21 @@ const YandexMap = () => {
                 <GeolocationControl options={{ float: 'right'}} />
                 </Map>
             </YMaps>
-            { modal ? <div tabIndex="-1" onBlur={() => setModal(false)}>
-                <ModalMarker
-                    style={{right: `${coordX}px`, top: `${coordY}px`}}
-                    modalImage={'http://localhost:29080/strapi' + dataMaps[0].attributes.photo.data.attributes.url}
-                    modalHead={dataMaps[0].attributes.name}
-                    modalAddress={dataMaps[0].attributes.address}
-                    modalBody={dataMaps[0].attributes.description}
-                />
-            </div> : '' }
+            { modal ?
+                   dataMaps.map(data => {
+                        if(data.id === idPlacemark) {
+                            return <div tabIndex="-1" onBlur={() => setModal(false)}>
+                                    <ModalMarker
+                                        style={{right: `${coordX}px`, top: `${coordY}px`}}
+                                        modalImage={'http://localhost:29080/strapi' + data.attributes.photo.data.attributes.url}
+                                        modalHead={data.attributes.name}
+                                        modalAddress={data.attributes.address}
+                                        modalBody={data.attributes.description}
+                                    />
+                                </div>
+                        }
+                   })
+                 : '' }
         </div>
     );
 };

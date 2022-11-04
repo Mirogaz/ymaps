@@ -16,12 +16,10 @@ const Filter = () => {
     useEffect(() =>{
         dataFilter
             .getDataFilter()
-            .then(res => setParamFilter([res.data.data[0]]))
+            .then(res => setParamFilter(res.data.data))
             .catch(e => console.log(e));
     }
     , [])
-
-    console.log(paramFilter)
 
     return (
         <div className='filter'>
