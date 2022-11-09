@@ -3,11 +3,13 @@ import {ReactComponent as Information} from '../../images/svg/information.svg';
 import InputComponent from '../InputComponent';
 import dataFilter from '../../api/yandexMap.js';
 import './Filter.style.scss';
+import PropTypes from 'prop-types';
 
-const Filter = () => {
+const Filter = ({updateMap}) => {
 
     const [filter, setFilter] = useState(false);
     const [paramFilter, setParamFilter] = useState([]);
+    const [check, setCheck] = useState(false);
 
     const openFilter = () => {
         setFilter(prev => !prev)
@@ -35,9 +37,7 @@ const Filter = () => {
                                         key={data.id}
                                         type='checkbox'
                                         value={data.attributes.type}
-                                        onChange={(e) => {
-                                            console.log(e.target.value)
-                                        }}
+                                        onChange={e => updateMap(data.id, e.target.checked)}
                                         classNameInput='filter__item_input'
                                         className='filter__item_content'
                                         children={
@@ -54,6 +54,10 @@ const Filter = () => {
             }
         </div>
     )
+}
+
+Filter.propTypes = {
+    updateMap: PropTypes.func,
 }
 
 export default Filter;

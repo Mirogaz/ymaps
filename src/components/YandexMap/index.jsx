@@ -12,22 +12,40 @@ const YandexMap = () => {
     const [coordX, setCoordX] = useState(0);
     const [coordY, setCoordY] = useState(0);
     const [idPlacemark, setIdPlacemark] = useState(0);
+    const [idFilter, setIdFilter] = useState([]);
 
     const determinationCoordinates = (e) => {
         setCoordX(e.clientX + 100);
         setCoordY(e.clientY - 200);
     }
 
+    const updateMap = (value, checked) => {
+        if(checked) {
+            setIdFilter([...idFilter, value])
+            dataPlacemark
+                .getUseFilter(idFilter)
+                .then(res => {
+                    setDataMaps(res.data.data)
+                        }
+                    )
+                .catch(e => console.log(e));
+        } else {
+            setIdFilter(idFilter.filter(id => id !== value))
+        }
+    }
+
+    console.log(idFilter)
+
     useEffect(() => {
         dataPlacemark
-            .getDataModal()
+            .getDataPlacemark()
             .then(res => setDataMaps(res.data.data))
             .catch(e => console.log(e));
     }, [])
 
     return (
         <div className='map' onClick={determinationCoordinates}>
-            <Filter />
+            <Filter updateMap={updateMap}/>
             <YMaps version={2.1}>
                 <Map
                     onClick={() => setModal(false)}
@@ -78,6 +96,7 @@ const YandexMap = () => {
                         if(data.id === idPlacemark) {
                             return <div tabIndex="-1" onBlur={() => setModal(false)}>
                                     <ModalMarker
+                                        key={data.id}
                                         style={{right: `${coordX}px`, top: `${coordY}px`}}
                                         modalImage={'http://localhost:29080/strapi' + data.attributes.photo.data.attributes.url}
                                         modalHead={data.attributes.name}
