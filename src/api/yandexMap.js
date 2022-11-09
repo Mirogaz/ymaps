@@ -8,12 +8,13 @@ const getDataFilter = async () => {
     return await httpClient.get('/tipy-obektov-ekosistems?populate=icon')
 }
 
-const getUseFilter = (id) => {
+const getUseFilter = async (id) => {
     let string = '';
     id.map((data, id) => {
         string += `&filters[id][$in][${id}]=${data}`
     })
-    return httpClient.get(`/ecosystems?populate=photo,type.icon${string}`)
+
+    return await httpClient.get(`/ecosystems?populate=photo,type.icon${string}`)
 }
 
 export default {

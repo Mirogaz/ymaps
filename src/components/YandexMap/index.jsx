@@ -20,21 +20,24 @@ const YandexMap = () => {
     }
 
     const updateMap = (value, checked) => {
-        if(checked) {
-            setIdFilter([...idFilter, value])
-            dataPlacemark
-                .getUseFilter(idFilter)
-                .then(res => {
-                    setDataMaps(res.data.data)
-                        }
-                    )
-                .catch(e => console.log(e));
-        } else {
-            setIdFilter(idFilter.filter(id => id !== value))
+            if(checked) {
+                setIdFilter([...idFilter, value])
+            } else {
+                setIdFilter(idFilter.filter(id => id !== value))
+            }
         }
-    }
 
     console.log(idFilter)
+
+    useEffect(() => {
+        dataPlacemark
+            .getUseFilter(idFilter)
+            .then(res => {
+                setDataMaps(res.data.data)
+                    }
+                )
+            .catch(e => console.log(e));
+    }, [idFilter])
 
     useEffect(() => {
         dataPlacemark

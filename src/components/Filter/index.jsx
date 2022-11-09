@@ -37,7 +37,7 @@ const Filter = ({updateMap}) => {
                                         key={data.id}
                                         type='checkbox'
                                         value={data.attributes.type}
-                                        onChange={e => updateMap(data.id, e.target.checked)}
+                                        onChange={e => {updateMap(data.id, e.target.checked); setCheck(e.target.checked)}}
                                         classNameInput='filter__item_input'
                                         className='filter__item_content'
                                         children={
